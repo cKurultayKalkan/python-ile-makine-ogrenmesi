@@ -11,3 +11,8 @@ ulke[:, 0] = le.fit_transform(ulke[:, 0])
 
 ct = ColumnTransformer([("all", OneHotEncoder(), [0])], remainder='passthrough')
 X = ct.fit_transform(ulke)
+
+## veya
+
+ohe = OneHotEncoder(categories='auto')
+ulke = ohe.fit_transform(ulke).toarray()
