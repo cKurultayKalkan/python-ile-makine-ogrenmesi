@@ -1,6 +1,5 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from sklearn.compose import ColumnTransformer
 
 veriler = pd.read_csv('veriler.csv')
 ulke = veriler.iloc[:, 0:1].values
