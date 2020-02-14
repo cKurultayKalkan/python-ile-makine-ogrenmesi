@@ -26,19 +26,19 @@ ulke[:, 0] = le.fit_transform(ulke[:, 0])
 ohe = OneHotEncoder(categories='auto')
 ulke = ohe.fit_transform(ulke).toarray()
 
-sonuc = pd.DataFrame(data=ulke, index=range(22), columns=['fr', 'tr', 'us'])
-print(sonuc)
+ulkeler_frame = pd.DataFrame(data=ulke, index=range(22), columns=['fr', 'tr', 'us'])
+print(ulkeler_frame)
 
-sonuc2 = pd.DataFrame(data=Yas, index=range(22), columns=['boy', 'kilo', 'yas'])
-print(sonuc2)
+boy_kilo_yas_frame = pd.DataFrame(data=Yas, index=range(22), columns=['boy', 'kilo', 'yas'])
+print(boy_kilo_yas_frame)
 
 cinsiyet = veriler.iloc[:, -1:].values
 
-sonuc3 = pd.DataFrame(data=cinsiyet, index=range(22), columns=['cinsiyet'])
-print(sonuc3)
+cinsiyet_frame = pd.DataFrame(data=cinsiyet, index=range(22), columns=['cinsiyet'])
+print(cinsiyet_frame)
 
-s = pd.concat([sonuc, sonuc2], axis=1)
-print(s)
+merged_frames = pd.concat([ulkeler_frame, boy_kilo_yas_frame], axis=1)
+print(merged_frames)
 
-s2 = pd.concat([s, sonuc3], axis=1)
+s2 = pd.concat([merged_frames, cinsiyet_frame], axis=1)
 print(s2)
