@@ -3,40 +3,34 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.linear_model import LinearRegression
 
-veriler = pd.read_csv("odev_tenis.csv")
+ilkveriler = pd.read_csv("odev_tenis.csv")
+
+test_apply = ilkveriler.apply(LabelEncoder().fit_transform)
 
 le = LabelEncoder()
 
-play = veriler.iloc[:, 4:].values
+play = ilkveriler.iloc[:, 4:].values
 
 play[:, 0] = le.fit_transform(play[:, 0])
-
-print(play)
 
 play_status_df = pd.DataFrame(data=play, index=range(14), columns=['play'])
 
 le = LabelEncoder()
 
-outlook = veriler.iloc[:, 0:1].values
+outlook = ilkveriler.iloc[:, 0:1].values
 
 outlook[:, 0] = le.fit_transform(outlook[:, 0])
 
 ohe = OneHotEncoder(categories='auto')
 outlook_status = ohe.fit_transform(outlook).toarray()
 
-print(outlook_status)
-
 outlook_status_df = pd.DataFrame(data=outlook_status, index=range(14), columns=['overcast', 'rainy', 'sunny'])
 
-raw = veriler.iloc[:, 1:4]
+raw = ilkveriler.iloc[:, 1:4]
 
 raw_df = pd.DataFrame(data=raw, index=range(14), columns=["temperature", "humidity", "windy"])
 
-print(raw_df)
-
-veriler = pd.concat([raw_df, outlook_status_df], axis=1)
-
-print(veriler)
+veriler = pd.concat([raw_df, outlook_status_df], axis=1, join='inner')
 
 from sklearn.model_selection import train_test_split
 
@@ -51,7 +45,8 @@ import statsmodels.api as sm
 
 X = np.append(arr=np.ones((14, 1)).astype(int), values=veriler, axis=1)
 X_l = veriler.iloc[:, [0, 1, 2, 3, 4]].values
-
+X_l = np.array(X_l, dtype=float)
+play = np.array(play, dtype=float)
 model = sm.OLS(play, X_l).fit()
 
 print(model.summary())
