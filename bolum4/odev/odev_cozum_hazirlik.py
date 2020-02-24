@@ -41,12 +41,30 @@ r2.fit(x_train, y_train)
 
 predict_play_status_from_others = r2.predict(x_test)
 
+veriler2 = pd.concat([veriler.iloc[:, :1], veriler.iloc[:, 2:], play_status_df], axis=1, join="inner")
+humidity = veriler.iloc[:, 1:2]
+x2_train, x2_test, y2_train, y2_test = train_test_split(veriler2, humidity, test_size=0.33, random_state=0)
+
+r3 = LinearRegression()
+r3.fit(x2_train, y2_train)
+predict_huminity_status_from_others = r3.predict(x2_test)
+
 import statsmodels.api as sm
 
-X = np.append(arr=np.ones((14, 1)).astype(int), values=veriler, axis=1)
-X_l = veriler.iloc[:, [0, 1, 2, 3, 4]].values
+X_l = veriler2.iloc[:, [0, 1, 2, 3, 4]].values
 X_l = np.array(X_l, dtype=float)
-play = np.array(play, dtype=float)
-model = sm.OLS(play, X_l).fit()
+humidity = np.array(humidity, dtype=float)
+model = sm.OLS(humidity, X_l).fit()
+
+print(model.summary())
+
+x2_train = x2_train.iloc[:, [0, 2, 3, 4]].values
+x2_test = x2_test.iloc[:, [0, 2, 3, 4]].values
+
+r3.fit(x2_train, y2_train)
+predict_huminity_status_from_others2 = r3.predict(x2_test)
+
+X_l = veriler2.iloc[:, [0, 2, 3, 4]].values
+model = sm.OLS(humidity, X_l).fit()
 
 print(model.summary())
